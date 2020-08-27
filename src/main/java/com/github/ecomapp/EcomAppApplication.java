@@ -3,11 +3,15 @@ package com.github.ecomapp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +33,24 @@ class Product {
 interface ProductRepository extends JpaRepository<Product, Long> {
 
 }
+
+
+@Controller
+class ProductController {
+	@Autowired
+	private ProductRepository productRepository;
+	@GetMapping("/")
+	public String index() {
+		return "index";
+	}
+
+	@GetMapping("/products")
+	public String index(Model model) {
+		model.addAttribute("products", productRepository.findAll());
+		return "products";
+	}
+}
+
 
 @SpringBootApplication
 public class EcomAppApplication {
